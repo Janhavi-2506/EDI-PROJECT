@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reports</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Admin Sidebar -->
+    <aside class="sidebar">
+
+        <div class="logo">🛠️ Admin Panel</div>
+
+        <nav class="nav">
+
+            <a href="dashboard.html">Dashboard</a>
+
+            <a href="users.html">Users</a>
+
+            <a href="labs.html">Laboratories</a>
+
+            <a href="classrooms.html">Classrooms</a>
+
+            <a href="resources.html">Resources</a>
+
+            <a href="conflicts.html">Conflicts</a>
+
+            <a href="reports.html" class="active">Reports</a>
+
+            <a href="profile.html">Profile</a>
+
+            <a href="../login.html">Logout</a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="main">
+
+        <div class="topbar">
+
+            <h2>Reports</h2>
+
+        </div>
+
+
+        <!-- Summary Cards -->
+        <div class="grid-3">
+
+            <div class="card">
+
+                <h3>Monthly Bookings</h3>
+
+                <p style="font-size:30px;font-weight:bold;">
+                    340
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Lab Utilization</h3>
+
+                <p style="font-size:30px;font-weight:bold;">
+                    82%
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>Classroom Utilization</h3>
+
+                <p style="font-size:30px;font-weight:bold;">
+                    74%
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Generate Report -->
+        <div class="card">
+
+            <h3>Generate Reports</h3>
+
+            <p style="margin-bottom:20px;">
+                Select the type of report and apply filters to generate a customized report.
+            </p>
+
+
+            <!-- Report Type -->
+            <div class="form-group">
+
+                <label>Report Type</label>
+
+                <select id="reportType">
+
+                    <option value="overall">
+                        Overall Booking Report
+                    </option>
+
+                    <option value="lab">
+                        Lab-wise Report
+                    </option>
+
+                    <option value="classroom">
+                        Classroom-wise Report
+                    </option>
+
+                    <option value="priority">
+                        Priority Booking Report
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Date Filters -->
+            <div class="grid-2">
+
+                <div class="form-group">
+
+                    <label>From Date</label>
+
+                    <input
+                        type="date"
+                        id="fromDate"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>To Date</label>
+
+                    <input
+                        type="date"
+                        id="toDate"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- Status Filter -->
+            <div class="form-group">
+
+                <label>Booking Status</label>
+
+                <select id="statusFilter">
+
+                    <option value="all">
+                        All Status
+                    </option>
+
+                    <option value="approved">
+                        Approved
+                    </option>
+
+                    <option value="pending">
+                        Pending
+                    </option>
+
+                    <option value="rejected">
+                        Rejected
+                    </option>
+
+                    <option value="cancelled">
+                        Cancelled
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Laboratory Filter -->
+            <div
+                class="form-group"
+                id="labFilterGroup"
+                style="display:none;"
+            >
+
+                <label>Laboratory</label>
+
+                <select id="labFilter">
+
+                    <option value="all">
+                        All Laboratories
+                    </option>
+
+                    <option value="Computer Lab A-101">
+                        Computer Lab A-101
+                    </option>
+
+                    <option value="Electronics Lab B-203">
+                        Electronics Lab B-203
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Classroom Filter -->
+            <div
+                class="form-group"
+                id="classroomFilterGroup"
+                style="display:none;"
+            >
+
+                <label>Classroom</label>
+
+                <select id="classroomFilter">
+
+                    <option value="all">
+                        All Classrooms
+                    </option>
+
+                    <option value="Classroom C-305">
+                        Classroom C-305
+                    </option>
+
+                    <option value="Classroom C-306">
+                        Classroom C-306
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- Generate Button -->
+            <button
+                class="btn"
+                onclick="generateReport()"
+            >
+                Generate Report
+            </button>
+
+        </div>
+
+
+        <!-- Report Preview -->
+        <div
+            class="card"
+            id="reportPreview"
+            style="display:none;"
+        >
+
+            <h3 id="reportTitle">
+                Report Preview
+            </h3>
+
+
+            <p
+                id="reportDescription"
+                style="margin-bottom:20px;"
+            ></p>
+
+
+            <div style="overflow-x:auto;">
+
+                <table
+                    style="
+                        width:100%;
+                        border-collapse:collapse;
+                        text-align:left;
+                    "
+                >
+
+                    <thead>
+
+                        <tr>
+
+                            <th
+                                style="
+                                    padding:12px;
+                                    border-bottom:1px solid #ddd;
+                                "
+                            >
+                                Faculty
+                            </th>
+
+                            <th
+                                style="
+                                    padding:12px;
+                                    border-bottom:1px solid #ddd;
+                                "
+                            >
+                                Resource
+                            </th>
+
+                            <th
+                                style="
+                                    padding:12px;
+                                    border-bottom:1px solid #ddd;
+                                "
+                            >
+                                Date
+                            </th>
+
+                            <th
+                                style="
+                                    padding:12px;
+                                    border-bottom:1px solid #ddd;
+                                "
+                            >
+                                Time
+                            </th>
+
+                            <th
+                                style="
+                                    padding:12px;
+                                    border-bottom:1px solid #ddd;
+                                "
+                            >
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="reportTableBody">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <!-- Download Buttons -->
+            <div style="margin-top:20px;">
+
+                <button
+                    class="btn"
+                    onclick="downloadPDF()"
+                >
+                    Download PDF
+                </button>
+
+                <button
+                    class="btn btn-secondary"
+                    style="margin-left:10px;"
+                    onclick="downloadExcel()"
+                >
+                    Download Excel
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script src="../assets/js/app.js"></script>
+
+
+<script>
+
+/*
+    Sample booking data for frontend preview.
+
+    Later, this can be replaced by data
+    fetched from the existing bookings table.
+*/
+
+const bookings = [
+
+    {
+        faculty: "Dr. Smith",
+        resource: "Computer Lab A-101",
+        date: "2026-09-22",
+        time: "08:00 AM - 09:00 AM",
+        status: "approved"
+    },
+
+    {
+        faculty: "Prof. Rahul Kulkarni",
+        resource: "Electronics Lab B-203",
+        date: "2026-09-23",
+        time: "09:15 AM - 10:15 AM",
+        status: "pending"
+    },
+
+    {
+        faculty: "Dr. Anjali Deshmukh",
+        resource: "Classroom C-305",
+        date: "2026-09-24",
+        time: "11:45 AM - 12:45 PM",
+        status: "approved"
+    },
+
+    {
+        faculty: "Prof. Meera Joshi",
+        resource: "Computer Lab A-101",
+        date: "2026-09-25",
+        time: "02:00 PM - 03:00 PM",
+        status: "approved"
+    },
+
+    {
+        faculty: "Dr. Neha Patil",
+        resource: "Electronics Lab B-203",
+        date: "2026-09-26",
+        time: "10:30 AM - 11:30 AM",
+        status: "rejected"
+    },
+
+    {
+        faculty: "Dr. Smith",
+        resource: "Classroom C-305",
+        date: "2026-09-27",
+        time: "09:15 AM - 10:15 AM",
+        status: "cancelled"
+    }
+
+];
+
+
+/*
+    Show only the filter relevant
+    to the selected report type.
+*/
+
+document
+    .getElementById("reportType")
+    .addEventListener("change", function () {
+
+        const reportType = this.value;
+
+        document.getElementById("labFilterGroup").style.display = "none";
+
+        document.getElementById("classroomFilterGroup").style.display = "none";
+
+
+        if (reportType === "lab") {
+
+            document.getElementById("labFilterGroup").style.display = "block";
+
+        }
+
+
+        if (reportType === "classroom") {
+
+            document.getElementById("classroomFilterGroup").style.display = "block";
+
+        }
+
+    });
+
+
+
+/*
+    Generate report using selected filters.
+*/
+
+function generateReport() {
+
+    const reportType =
+        document.getElementById("reportType").value;
+
+    const fromDate =
+        document.getElementById("fromDate").value;
+
+    const toDate =
+        document.getElementById("toDate").value;
+
+    const status =
+        document.getElementById("statusFilter").value;
+
+    const lab =
+        document.getElementById("labFilter").value;
+
+    const classroom =
+        document.getElementById("classroomFilter").value;
+
+
+    /*
+        Start with all bookings.
+    */
+
+    let filteredBookings = [...bookings];
+
+
+    /*
+        Filter by date.
+    */
+
+    if (fromDate) {
+
+        filteredBookings = filteredBookings.filter(
+            booking => booking.date >= fromDate
+        );
+
+    }
+
+
+    if (toDate) {
+
+        filteredBookings = filteredBookings.filter(
+            booking => booking.date <= toDate
+        );
+
+    }
+
+
+    /*
+        Filter by booking status.
+    */
+
+    if (status !== "all") {
+
+        filteredBookings = filteredBookings.filter(
+            booking => booking.status === status
+        );
+
+    }
+
+
+    /*
+        Filter by laboratory.
+    */
+
+    if (reportType === "lab" && lab !== "all") {
+
+        filteredBookings = filteredBookings.filter(
+            booking => booking.resource === lab
+        );
+
+    }
+
+
+    /*
+        Filter by classroom.
+    */
+
+    if (reportType === "classroom" && classroom !== "all") {
+
+        filteredBookings = filteredBookings.filter(
+            booking => booking.resource === classroom
+        );
+
+    }
+
+
+    /*
+        Priority Booking Report.
+
+        For the frontend preview, pending and approved
+        bookings are shown as priority requests.
+    */
+
+    if (reportType === "priority") {
+
+        filteredBookings = filteredBookings.filter(
+            booking =>
+                booking.status === "pending" ||
+                booking.status === "approved"
+        );
+
+    }
+
+
+    /*
+        Set report title.
+    */
+
+    let title = "Overall Booking Report";
+
+
+    if (reportType === "lab") {
+
+        title = "Lab-wise Report";
+
+    }
+
+
+    if (reportType === "classroom") {
+
+        title = "Classroom-wise Report";
+
+    }
+
+
+    if (reportType === "priority") {
+
+        title = "Priority Booking Report";
+
+    }
+
+
+    document.getElementById("reportTitle").textContent = title;
+
+
+    /*
+        Create description.
+    */
+
+    let description =
+        "Generated using the selected filters.";
+
+
+    if (fromDate || toDate) {
+
+        description +=
+            " Date range: " +
+            (fromDate || "Any") +
+            " to " +
+            (toDate || "Any") +
+            ".";
+
+    }
+
+
+    if (status !== "all") {
+
+        description +=
+            " Status: " +
+            status.charAt(0).toUpperCase() +
+            status.slice(1) +
+            ".";
+
+    }
+
+
+    document.getElementById("reportDescription").textContent =
+        description;
+
+
+    /*
+        Display filtered bookings.
+    */
+
+    const tableBody =
+        document.getElementById("reportTableBody");
+
+    tableBody.innerHTML = "";
+
+
+    if (filteredBookings.length === 0) {
+
+        tableBody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    style="
+                        padding:20px;
+                        text-align:center;
+                    "
+                >
+                    No bookings found for the selected filters.
+                </td>
+
+            </tr>
+
+        `;
+
+    } else {
+
+        filteredBookings.forEach(booking => {
+
+            const row =
+                document.createElement("tr");
+
+
+            row.innerHTML = `
+
+                <td
+                    style="
+                        padding:12px;
+                        border-bottom:1px solid #eee;
+                    "
+                >
+                    ${booking.faculty}
+                </td>
+
+                <td
+                    style="
+                        padding:12px;
+                        border-bottom:1px solid #eee;
+                    "
+                >
+                    ${booking.resource}
+                </td>
+
+                <td
+                    style="
+                        padding:12px;
+                        border-bottom:1px solid #eee;
+                    "
+                >
+                    ${booking.date}
+                </td>
+
+                <td
+                    style="
+                        padding:12px;
+                        border-bottom:1px solid #eee;
+                    "
+                >
+                    ${booking.time}
+                </td>
+
+                <td
+                    style="
+                        padding:12px;
+                        border-bottom:1px solid #eee;
+                        text-transform:capitalize;
+                    "
+                >
+                    ${booking.status}
+                </td>
+
+            `;
+
+
+            tableBody.appendChild(row);
+
+        });
+
+    }
+
+
+    /*
+        Show report preview.
+    */
+
+    document.getElementById("reportPreview").style.display =
+        "block";
+
+}
+
+
+
+/*
+    Frontend-only PDF download preview.
+*/
+
+function downloadPDF() {
+
+    const title =
+        document.getElementById("reportTitle").textContent;
+
+    const table =
+        document.getElementById("reportTableBody").innerText;
+
+
+    if (!table) {
+
+        alert("Please generate a report first.");
+
+        return;
+
+    }
+
+
+    const content =
+        title +
+        "\n\n" +
+        table;
+
+
+    const blob =
+        new Blob(
+            [content],
+            { type: "application/pdf" }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download = "booking-report.pdf";
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+
+
+/*
+    Frontend-only Excel/CSV download.
+
+    CSV files can be opened directly in Excel.
+*/
+
+function downloadExcel() {
+
+    const rows =
+        document.querySelectorAll(
+            "#reportTableBody tr"
+        );
+
+
+    if (rows.length === 0) {
+
+        alert("Please generate a report first.");
+
+        return;
+
+    }
+
+
+    let csv =
+        "Faculty,Resource,Date,Time,Status\n";
+
+
+    rows.forEach(row => {
+
+        const cells =
+            row.querySelectorAll("td");
+
+
+        if (cells.length === 5) {
+
+            const values = [];
+
+
+            cells.forEach(cell => {
+
+                values.push(
+                    `"${cell.innerText.replace(/"/g, '""')}"`
+                );
+
+            });
+
+
+            csv +=
+                values.join(",") +
+                "\n";
+
+        }
+
+    });
+
+
+    const blob =
+        new Blob(
+            [csv],
+            { type: "text/csv" }
+        );
+
+
+    const url =
+        URL.createObjectURL(blob);
+
+
+    const link =
+        document.createElement("a");
+
+    link.href = url;
+
+    link.download = "booking-report.csv";
+
+    link.click();
+
+
+    URL.revokeObjectURL(url);
+
+}
+
+</script>
+
+
+</body>
+
+</html>
